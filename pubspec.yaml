@@ -1,0 +1,16 @@
+name: dart_opengl
+description: Dart bindings for the Open Graphics Library
+version: 0.1.0
+repository: https://github.com/gliscowo/dart_opengl
+
+environment:
+  sdk: ^3.0.5
+
+dependencies:
+  ffi: ^2.1.0
+
+dev_dependencies:
+  ffigen: ^9.0.1
+  glfw: ^0.5.0
+  lints: ^2.0.0
+  test: ^1.21.0
