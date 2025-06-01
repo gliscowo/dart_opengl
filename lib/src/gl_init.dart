@@ -9,7 +9,7 @@ OpenGL? _instance;
 
 /// Load the OpenGL functions of this platform's standard OpenGL library
 /// or the ones located in the binary at [libaryPath], if provided
-OpenGL loadOpenGL([String? libraryPath]) {
+OpenGL loadOpenGLFromPath([String? libraryPath]) {
   if (_instance != null) return _instance!;
 
   if (libraryPath == null) {
@@ -33,6 +33,11 @@ OpenGL loadOpenGL([String? libraryPath]) {
     throw GlInitError("Failed to load OpenGL binary", e);
   }
 
+  return loadOpenGL(openGlLibrary);
+}
+
+/// Load the OpenGL functions from [library]
+OpenGL loadOpenGL(DynamicLibrary library) {
   String? getProcAddressFunction;
   if (Platform.isLinux) {
     getProcAddressFunction = "glXGetProcAddress";
@@ -43,7 +48,7 @@ OpenGL loadOpenGL([String? libraryPath]) {
   int Function(Pointer<Utf8>)? getProcAddress;
   if (getProcAddressFunction != null) {
     try {
-      getProcAddress = openGlLibrary.lookupFunction<Int64 Function(Pointer<Utf8>), int Function(Pointer<Utf8>)>(
+      getProcAddress = library.lookupFunction<Int64 Function(Pointer<Utf8>), int Function(Pointer<Utf8>)>(
           getProcAddressFunction,
           isLeaf: true);
     } catch (e) {
@@ -52,8 +57,8 @@ OpenGL loadOpenGL([String? libraryPath]) {
   }
 
   Pointer<T> lookupSymbol<T extends NativeType>(String symbol) {
-    if (openGlLibrary.providesSymbol(symbol)) {
-      return openGlLibrary.lookup(symbol);
+    if (library.providesSymbol(symbol)) {
+      return library.lookup(symbol);
     } else if (getProcAddress != null) {
       return Pointer.fromAddress(getProcAddress(symbol.toNativeUtf8()));
     } else {
