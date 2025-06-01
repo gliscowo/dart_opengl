@@ -1,6 +1,6 @@
 name: dart_opengl
 description: Dart bindings for the Open Graphics Library
-version: 0.2.0
+version: 0.2.1
 repository: https://github.com/gliscowo/dart_opengl
 
 publish_to: https://pub.wispforest.io
