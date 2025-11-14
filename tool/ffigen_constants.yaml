@@ -1,0 +1,15 @@
+output: '../lib/src/gl_constants.dart'
+headers:
+  entry-points: 
+    - 'glext.h'
+
+ffi-native:
+  asset-id: 'package:dart_opengl/gl'
+
+exclude-all-by-default: true
+macros:
+  include:
+    - 'GL_.*'
+
+name: 'GL'
+description: 'Bindings for the OpenGL 1.0+ Compatibility Profile API'

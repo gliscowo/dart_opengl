@@ -5,4 +5,4 @@
 library;
 
 export 'src/gl_constants.dart';
-export 'src/gl_init.dart' show loadOpenGL, loadOpenGLFromPath;
+export 'src/gl_functions.dart';
