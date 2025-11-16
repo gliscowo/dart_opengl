@@ -5,4 +5,5 @@
 library;
 
 export 'src/gl_constants.dart';
-export 'src/gl_functions.dart';
+export 'src/gl_functions.dart' hide GL;
+export 'src/gl_init.dart' show gl;

@@ -3,9 +3,6 @@ headers:
   entry-points: 
     - 'glext.h'
 
-ffi-native:
-  asset-id: 'package:dart_opengl/gl'
-
 exclude-all-by-default: true
 macros:
   include:

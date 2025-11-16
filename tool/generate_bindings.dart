@@ -8,7 +8,8 @@ void main(List<String> args) {
   runGenerator('functions', stripEmptyLines: false);
 }
 
-final constantPattern = RegExp('GL_([A-Za-z0-9_]*)');
+final constantPattern = RegExp('GL_([A-Za-z0-9_]+)');
+final functionPattern = RegExp(r' gl([A-Za-z0-9]+)\(');
 
 void runGenerator(String config, {required bool stripEmptyLines}) {
   final generator = YamlConfig.fromFile(File('tool/ffigen_$config.yaml'), Logger('ffigen')).configAdapter();
@@ -17,7 +18,9 @@ void runGenerator(String config, {required bool stripEmptyLines}) {
   final outFile = File.fromUri(generator.output.dartFile);
 
   var processed = outFile.readAsLinesSync().map(
-    (line) => line.replaceAllMapped(constantPattern, (match) => 'gl_${screamingSnakeToCamel(match[1]!)}'),
+    (line) => line
+        .replaceAllMapped(constantPattern, (match) => 'gl${screamingSnakeToPascal(match[1]!)}')
+        .replaceAllMapped(functionPattern, (match) => ' ${match[1]![0].toLowerCase() + match[1]!.substring(1)}('),
   );
 
   if (stripEmptyLines) {
@@ -29,10 +32,7 @@ void runGenerator(String config, {required bool stripEmptyLines}) {
 }
 
 final underscorePattern = RegExp('_(.)');
-String screamingSnakeToCamel(String input) {
-  return input.toLowerCase().replaceAllMapped(underscorePattern, (match) => match[1]!.toUpperCase());
-}
-
-String pascalToCamel(String input) {
-  return input[0].toLowerCase() + input.substring(1);
+String screamingSnakeToPascal(String input) {
+  final camel = input.toLowerCase().replaceAllMapped(underscorePattern, (match) => match[1]!.toUpperCase());
+  return camel[0].toUpperCase() + camel.substring(1);
 }
